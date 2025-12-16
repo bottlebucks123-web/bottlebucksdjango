@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for=""></label>
+            <label for="">NAME:</label>
+            <textarea name="ProductName" id="">{{c.ProductName}}</textarea><br><br><br>
+            <img src="{{c.ProductImage.url}}" alt="" height="100px" width="100px">
+            <label for="">IMAGE:</label>
+        <input type="file" name="ProductImage"><br><br><br>
+         <label for="">DESCRIPTION :</label>
+         <textarea name="Description" id="">{{c.Description}}</textarea><br><br><br>
+         <label for="">POINTS ELIGIBLE :</label>
+         <textarea name="PointsEligible" id="">{{c.PointsEligible}}</textarea><br><br><br>
+         <input type="submit" value="update">
+    <br><br><br>
+    </form>
+</body>
+</html>

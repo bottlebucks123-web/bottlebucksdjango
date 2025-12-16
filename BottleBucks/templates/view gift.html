@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <title>view gifts</title>
+
+    </head>
+<body>
+    <table border="1" cellpadding="12" cellspacing="0">
+        <tr>
+             <th>name</th>
+             <th>product image</th>
+             <th>description</th>
+             <th>eligable points</th>
+             <th>actions</th>
+        </tr>
+        {% for i in hh %}
+        <tr>
+            <td>{{i.ProductName}}</td>
+            <th><img src="{{i.ProductImage.url}}" alt="" height="100px" width="100px"></th>
+            <th>{{i.Description}}</th>
+            <th>{{i.PointsEligible}}</th>
+            <th><a href="/EditGift/{{i.id}}">edit</a>
+            <a href="/DeleteProduct/{{i.id}}" onclick="return confirm('are you sure delete this product')">delete</a></th>
+        </tr>
+        {% endfor %}
+
+
+    </table>
+</body>

@@ -1,0 +1,22 @@
+body{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url(https://peopledaily.digital/wp-content/uploads/2025/09/Blood-moon.jpg);
+    
+}
+
+.Login{
+    text-align: center;
+    color:beige
+}
+form{
+    text-align: center;
+    border-width:1px ;
+    border-style: solid;
+    border-color: azure;
+    width: 350px;
+    margin:auto;
+    margin-top: 200px;
+    height: 200px;
+    border-radius: 20px;
+}

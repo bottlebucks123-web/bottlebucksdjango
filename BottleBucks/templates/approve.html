@@ -1,0 +1,40 @@
+<html>
+<head>
+    <title>User Register</title>
+</head>
+<body>
+    <table border="1" cellpadding="12" cellspacing="0">
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+        {% for i in obj %}
+        <tr>
+            <td>{{ i.Name }}</td>
+            <td>{{ i.Mobno }}</td>
+            <td>{{ i.Email }}</td>
+            <td>
+                {% if i.LOGINID.UserType == "pending" %}
+                    <a href="{% url 'ApproveUser' i.LOGINID.id %}">
+                        <button>Approve</button>
+                    </a>
+                    <a href="{% url 'RejectUser' i.LOGINID.id %}">
+                        <button>Reject</button>
+                    </a>
+                {% elif i.LOGINID.UserType == "user" %}
+                    <a href="{% url 'RejectUser' i.LOGINID.id %}">
+                        <button>Reject</button>
+                    </a>
+                {% elif i.LOGINID.UserType == "rejected" %}
+                    <a href="{% url 'ApproveUser' i.LOGINID.id %}">
+                        <button>Approve</button>
+                    </a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
