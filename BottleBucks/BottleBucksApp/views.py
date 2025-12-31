@@ -142,7 +142,7 @@ class UserReg_api(APIView):
 
         if data_valid and login_valid:
             # Save login
-            login_profile = login_serial.save(UserType='USER')
+            login_profile = login_serial.save(UserType='pending')
 
             user = user_serial.save(LOGINID=login_profile)
 
@@ -201,7 +201,7 @@ class LoginPageAPI(APIView):
             else:
                 response_dict["message"]="success"
                 response_dict["login_id"]=user.id
-                # response_dict["usertype"]=t_user.UserType
+                response_dict["usertype"]=user.UserType
                 # print(response_dict['login_id'])
                 # print(response_dict['usertype'])
 
@@ -447,6 +447,12 @@ class ProfileViewAPI(APIView):
 class NotificationApi(APIView):
     def get(self, request):
         c=NotificationTable.objects.all()
+        serializer=NotificationSerializer(c, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
+    
+class UserNotificationApi(APIView):
+    def get(self, request, id):
+        c=NotificationTable.objects.filter(USER_ID__LOGINID__id = id)
         serializer=NotificationSerializer(c, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
     
