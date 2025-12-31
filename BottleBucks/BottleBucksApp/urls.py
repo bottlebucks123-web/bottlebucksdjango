@@ -32,6 +32,6 @@ urlpatterns = [
     path('ProfileViewAPI/<int:id>',ProfileViewAPI.as_view()),
     path('NotificationApi', NotificationApi.as_view()),
     path('UserNotificationApi/<int:id>', UserNotificationApi.as_view()),
-    path('TransactionHistoryAPI/<int:id>',TransactionHistoryAPI.as_view())
-
+    path('TransactionHistoryAPI/<int:id>',TransactionHistoryAPI.as_view()),
+    path('scan-qr/', scan_qr_and_open_bin),
 ]

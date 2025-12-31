@@ -461,3 +461,76 @@ class TransactionHistoryAPI(APIView):
         c=ClaimPointAccount.objects.filter(USERID__LOGINID__id = id)
         ser=ClaimPointAccountser(c,many=True)
         return Response(ser.data,status=HTTP_200_OK)
+    
+
+import cv2
+import json
+import requests
+from pyzbar.pyzbar import decode
+from django.http import JsonResponse
+from .models import UserTable
+
+ESP_URL = "http://192.168.137.75/open"
+DEFAULT_POINTS = 100
+
+
+def scan_qr_and_open_bin(request):
+    cap = cv2.VideoCapture(0)
+    qr_raw_data = None
+
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        for qr in decode(frame):
+            qr_raw_data = qr.data.decode("utf-8")
+            break
+
+        cv2.imshow("Scan QR Code", frame)
+
+        if qr_raw_data:
+            break
+
+        if cv2.waitKey(1) & 0xFF == 27:  # ESC
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+    if not qr_raw_data:
+        return JsonResponse({"status": "failed", "message": "QR not detected"})
+
+    try:
+        # ---- PARSE JSON FROM QR ----
+        qr_data = json.loads(qr_raw_data)
+
+        user_id = qr_data.get("id")
+        if not user_id:
+            return JsonResponse({"status": "failed", "message": "Invalid QR data"})
+
+        # ---- FETCH USER ----
+        user = UserTable.objects.get(id=user_id)
+
+        # ---- ADD POINTS ----
+        user.point = (user.point or 0) + DEFAULT_POINTS
+        user.save()
+
+        # ---- OPEN BIN ----
+        requests.get(ESP_URL, timeout=3)
+
+        return JsonResponse({
+            "status": "success",
+            "user": user.Name,
+            "points_added": DEFAULT_POINTS,
+            "total_points": user.point
+        })
+
+    except UserTable.DoesNotExist:
+        return JsonResponse({"status": "failed", "message": "User not found"})
+
+    except json.JSONDecodeError:
+        return JsonResponse({"status": "failed", "message": "QR is not valid JSON"})
+
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)})
